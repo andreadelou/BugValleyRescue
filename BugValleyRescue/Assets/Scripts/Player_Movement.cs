@@ -7,12 +7,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float speed = 5f;
     private CharacterController characterController;
-    /*private Animator animator;*/
+    private Animator animator;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        /*animator = GetComponent<Animator>();*/
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -27,11 +27,16 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.forward = movementVector;
             characterController.SimpleMove(movementVector * speed);
-            /*animator.SetFloat("Movement", movementVector.magnitude);*/
+            animator.SetFloat("Speed", movementVector.magnitude);
         }
         else
         {
-            /*animator.SetFloat("Movement", 0);*/
+            animator.SetFloat("Speed", 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            animator.SetTrigger("PickUp");
         }
     }
 }
