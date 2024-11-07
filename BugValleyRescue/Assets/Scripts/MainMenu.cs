@@ -10,4 +10,14 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadSceneAsync(1);
     }
 
+    public void Credits()
+    {
+        SceneManager.LoadSceneAsync(2);
+    }
+
+    public void Principal()
+    {
+        SceneManager.LoadSceneAsync(0);
+    }
+
 }
