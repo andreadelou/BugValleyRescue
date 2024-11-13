@@ -1,10 +1,10 @@
 using UnityEngine;
-using TMPro; // Importa TextMeshPro
+using TMPro; 
 using UnityEngine.SceneManagement;
 
 public class UIController : MonoBehaviour
 {
-    public TextMeshProUGUI faltasText; // Cambia a TextMeshProUGUI
+    public TextMeshProUGUI faltasText; 
     private int faltas = 0;
 
     void Start()

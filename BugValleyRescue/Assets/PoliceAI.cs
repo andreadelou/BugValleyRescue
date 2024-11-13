@@ -14,7 +14,7 @@ public class PoliceAI : MonoBehaviour
     private int circleSegments = 50; // Número de segmentos para el círculo
     private bool isPlayerInsideRadius = false; // Bandera para saber si el jugador está dentro del radio
 
-    private UIController uiController; // Referencia al UIController
+    private UIController uiController; 
 
     void Start()
     {
@@ -36,7 +36,7 @@ public class PoliceAI : MonoBehaviour
             Debug.LogError("LineRenderer no encontrado en el objeto Police. Asegúrate de que el objeto tenga un LineRenderer.");
         }
 
-        // Encuentra el UIController en la escena
+        
         uiController = FindObjectOfType<UIController>();
         if (uiController == null)
         {
@@ -87,7 +87,7 @@ public class PoliceAI : MonoBehaviour
                 // El jugador acaba de entrar al radio, llamar a IncrementarFaltas en el UIController
                 if (uiController != null)
                 {
-                    uiController.IncrementarFaltas(); // Incrementa las faltas en UIController
+                    uiController.IncrementarFaltas(); 
                 }
                 isPlayerInsideRadius = true;
             }

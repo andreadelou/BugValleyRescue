@@ -1,11 +1,22 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Pickable : MonoBehaviour
 {
     private bool isCaptured = false;
     private float fadeDuration = 5.0f; // Duración del desvanecimiento
+
+    private Puntos puntosController; // Referencia al script Puntos
+
+    void Start()
+    {
+        // Encuentra el componente Puntos en la escena
+        puntosController = FindObjectOfType<Puntos>();
+        if (puntosController == null)
+        {
+            Debug.LogError("Puntos no encontrado en la escena. Asegúrate de que el objeto que contiene Puntos está en la escena.");
+        }
+    }
 
     // Método que captura al insecto y comienza el desvanecimiento
     public void Capture()
@@ -14,13 +25,18 @@ public class Pickable : MonoBehaviour
         {
             isCaptured = true;
             StartCoroutine(FadeOutAndDisable());
+
+            // Incrementa los puntos en el controlador de puntos
+            if (puntosController != null)
+            {
+                puntosController.IncrementarPuntos();
+            }
         }
     }
 
     // Corutina para desvanecer y desactivar el insecto
     private IEnumerator FadeOutAndDisable()
     {
-        // Obtiene el material del insecto (suponiendo que tiene un Renderer)
         Renderer renderer = GetComponent<Renderer>();
         if (renderer != null)
         {
@@ -28,7 +44,7 @@ public class Pickable : MonoBehaviour
             float fadeSpeed = 1.0f / fadeDuration;
             float progress = 0f;
 
-            // Desvanecer el color del insecto reduciendo el alfa
+            // Desvanece el color del insecto reduciendo el alfa
             while (progress < 1.0f)
             {
                 progress += Time.deltaTime * fadeSpeed;
@@ -39,7 +55,7 @@ public class Pickable : MonoBehaviour
             }
         }
 
-        // Aquí desactivamos el objeto después de completar el desvanecimiento
+        // Desactiva el objeto después de completar el desvanecimiento
         gameObject.SetActive(false);
     }
 
