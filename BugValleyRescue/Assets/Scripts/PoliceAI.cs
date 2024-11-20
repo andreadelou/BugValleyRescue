@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PoliceAI : MonoBehaviour
@@ -9,12 +8,15 @@ public class PoliceAI : MonoBehaviour
     public float randomMoveInterval = 2.0f; // Intervalo de tiempo entre movimientos aleatorios
     public Transform player; // Referencia al transform del jugador
 
+    public AudioClip[] warningSounds; // Lista de sonidos de advertencia
+    private AudioSource audioSource; // Componente para reproducir audio
+
     private LineRenderer lineRenderer; // LineRenderer para el círculo
     private Vector3 targetPosition;
     private int circleSegments = 50; // Número de segmentos para el círculo
     private bool isPlayerInsideRadius = false; // Bandera para saber si el jugador está dentro del radio
 
-    private UIController uiController; 
+    private UIController uiController;
 
     void Start()
     {
@@ -33,14 +35,19 @@ public class PoliceAI : MonoBehaviour
         }
         else
         {
-            Debug.LogError("LineRenderer no encontrado en el objeto Police. Asegúrate de que el objeto tenga un LineRenderer.");
+            Debug.LogError("LineRenderer no encontrado en el objeto Police");
         }
 
-        
         uiController = FindObjectOfType<UIController>();
         if (uiController == null)
         {
-            Debug.LogError("UIController no encontrado en la escena. Asegúrate de que el UIController está en la escena.");
+            Debug.LogError("UIController no encontrado en la escena");
+        }
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource no encontrado en el objeto Police");
         }
 
         StartCoroutine(RandomMovement());
@@ -75,7 +82,6 @@ public class PoliceAI : MonoBehaviour
         }
     }
 
-    // Detecta si el jugador entra o sale del radio de detección
     private void DetectPlayer()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
@@ -84,11 +90,19 @@ public class PoliceAI : MonoBehaviour
         {
             if (!isPlayerInsideRadius)
             {
-                // El jugador acaba de entrar al radio, llamar a IncrementarFaltas en el UIController
+                // Incrementa las faltas
                 if (uiController != null)
                 {
-                    uiController.IncrementarFaltas(); 
+                    uiController.IncrementarFaltas();
                 }
+
+                // Reproduce un sonido aleatorio
+                if (warningSounds.Length > 0 && audioSource != null)
+                {
+                    int randomIndex = Random.Range(0, warningSounds.Length);
+                    audioSource.PlayOneShot(warningSounds[randomIndex]);
+                }
+
                 isPlayerInsideRadius = true;
             }
         }
@@ -98,7 +112,6 @@ public class PoliceAI : MonoBehaviour
         }
     }
 
-    // Dibuja el círculo de detección usando LineRenderer
     private void DrawDetectionRadius()
     {
         float angle = 0f;
