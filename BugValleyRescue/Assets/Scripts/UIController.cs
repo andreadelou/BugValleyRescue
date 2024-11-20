@@ -19,7 +19,7 @@ public class UIController : MonoBehaviour
 
         if (faltas >= 3)
         {
-            SceneManager.LoadSceneAsync(0);
+            SceneManager.LoadSceneAsync(4);
         }
     }
 
