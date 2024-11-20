@@ -22,7 +22,7 @@ public class Puntos : MonoBehaviour
         // Verifica si los puntos han alcanzado el límite para cambiar de nivel
         if (puntos >= puntosRequeridos)
         {
-            SceneManager.LoadScene(2); 
+            SceneManager.LoadScene(3); 
         }
     }
 
