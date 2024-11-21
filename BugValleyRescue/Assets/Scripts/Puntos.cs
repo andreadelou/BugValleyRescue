@@ -4,9 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class Puntos : MonoBehaviour
 {
-    public TextMeshProUGUI puntosText; 
-    public int puntosRequeridos = 10; 
-    private int puntos = 0; 
+    public TextMeshProUGUI puntosText;
+    public int puntosRequeridos = 10;
+    private int puntos = 0;
 
     void Start()
     {
@@ -22,7 +22,23 @@ public class Puntos : MonoBehaviour
         // Verifica si los puntos han alcanzado el límite para cambiar de nivel
         if (puntos >= puntosRequeridos)
         {
-            SceneManager.LoadScene(3); 
+            CambiarEscena();
+        }
+    }
+
+    // Método para cambiar a la siguiente escena
+    private void CambiarEscena()
+    {
+        int escenaActual = SceneManager.GetActiveScene().buildIndex; // Índice de la escena actual
+        int siguienteEscena = escenaActual + 1; // Determina la siguiente escena
+
+        if (siguienteEscena < SceneManager.sceneCountInBuildSettings) // Verifica que exista la siguiente escena
+        {
+            SceneManager.LoadScene(siguienteEscena); // Carga la siguiente escena
+        }
+        else
+        {
+            Debug.Log("No hay más escenas para cargar. Verifica las escenas en Build Settings.");
         }
     }
 
