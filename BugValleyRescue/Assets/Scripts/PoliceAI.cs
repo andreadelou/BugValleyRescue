@@ -5,7 +5,7 @@ public class PoliceAI : MonoBehaviour
 {
     public float detectionRadius = 5.0f; // Radio de detección del policía
     public float moveSpeed = 1.0f; // Velocidad de movimiento lento
-    public float randomMoveInterval = 2.0f; // Intervalo de tiempo entre movimientos aleatorios
+    public float randomMoveInterval = 1.0f; // Intervalo de tiempo entre movimientos aleatorios
     public Transform player; // Referencia al transform del jugador
 
     public AudioClip[] warningSounds; // Lista de sonidos de advertencia
@@ -16,10 +16,14 @@ public class PoliceAI : MonoBehaviour
     private int circleSegments = 50; // Número de segmentos para el círculo
     private bool isPlayerInsideRadius = false; // Bandera para saber si el jugador está dentro del radio
 
+    private CharacterController characterController;
+
     private UIController uiController;
 
     void Start()
     {
+        characterController = GetComponent<CharacterController>();
+
         lineRenderer = GetComponent<LineRenderer>();
 
         if (lineRenderer != null)
@@ -68,12 +72,15 @@ public class PoliceAI : MonoBehaviour
                 Random.Range(-1f, 1f)
             ).normalized;
 
-            targetPosition = transform.position + randomDirection * 2f;
+            targetPosition = transform.position + randomDirection * 5f;
 
             float elapsedTime = 0f;
             while (elapsedTime < randomMoveInterval)
             {
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+                Vector3 direction = (targetPosition - transform.position).normalized;
+                Vector3 velocity = direction * moveSpeed;
+                characterController.SimpleMove(velocity);
+
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
@@ -91,17 +98,10 @@ public class PoliceAI : MonoBehaviour
             if (!isPlayerInsideRadius)
             {
                 // Incrementa las faltas
-                if (uiController != null)
-                {
-                    uiController.IncrementarFaltas();
-                }
+                uiController?.IncrementarFaltas();
 
                 // Reproduce un sonido aleatorio
-                if (warningSounds.Length > 0 && audioSource != null)
-                {
-                    int randomIndex = Random.Range(0, warningSounds.Length);
-                    audioSource.PlayOneShot(warningSounds[randomIndex]);
-                }
+                PlayRandomWarningSound();
 
                 isPlayerInsideRadius = true;
             }
@@ -109,6 +109,15 @@ public class PoliceAI : MonoBehaviour
         else
         {
             isPlayerInsideRadius = false;
+        }
+    }
+
+    private void PlayRandomWarningSound()
+    {
+        if (warningSounds.Length > 0 && audioSource != null)
+        {
+            int randomIndex = Random.Range(0, warningSounds.Length);
+            audioSource.PlayOneShot(warningSounds[randomIndex]);
         }
     }
 

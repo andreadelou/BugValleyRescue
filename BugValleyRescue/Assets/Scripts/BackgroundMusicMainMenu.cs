@@ -11,7 +11,7 @@ public class BackgroundMusicMainMenu : MonoBehaviour
     {
         source = GetComponent<AudioSource>();
         source.volume = 0f;
-        StartCoroutine(Fade(true, source, 2f, 1f));
+        StartCoroutine(Fade(true, source, 2f, 0.7f));
         StartCoroutine(Fade(false, source, 2f, 0f));
     }
 
@@ -20,7 +20,7 @@ public class BackgroundMusicMainMenu : MonoBehaviour
         if (!source.isPlaying)
         {
             source.Play();
-            StartCoroutine(Fade(true, source, 2f, 1f));
+            StartCoroutine(Fade(true, source, 2f, 0.7f));
             StartCoroutine(Fade(false, source, 2f, 0f));
         }
     }
